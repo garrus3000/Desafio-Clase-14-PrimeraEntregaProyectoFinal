@@ -19,10 +19,7 @@ class Carritos {
                     productos: [],
                 };
                 carrito.push(contenido);
-                fs.writeFileSync(
-                    this.fileName,
-                    JSON.stringify(carrito, null, 2)
-                );
+                fs.writeFileSync(this.fileName, JSON.stringify(carrito, null, 2));
                 return carrito.id;
             }
         } catch (error) {
@@ -33,16 +30,11 @@ class Carritos {
     async deleteCartbyId(id) {
         try {
             const carrito = JSON.parse(fs.readFileSync(this.fileName, "utf-8"));
-            const index = carrito.findIndex(
-                (carrito) => carrito.id === Number(id)
-            );
+            const index = carrito.findIndex((carrito) => carrito.id === Number(id));
             if (index === -1) return null;
             else {
                 carrito.splice(index, 1);
-                fs.writeFileSync(
-                    this.fileName,
-                    JSON.stringify(carrito, null, 2)
-                );
+                fs.writeFileSync(this.fileName, JSON.stringify(carrito, null, 2));
             }
         } catch (error) {
             console.log("Error deleteCartbyId: ", error);
@@ -52,9 +44,7 @@ class Carritos {
     async getProductsByCartId(id) {
         try {
             const carrito = JSON.parse(fs.readFileSync(this.fileName, "utf-8"));
-            const index = carrito.findIndex(
-                (carrito) => carrito.id === Number(id)
-            );
+            const index = carrito.findIndex((carrito) => carrito.id === Number(id));
             if (index === -1) return null;
             else return carrito[index].productos;
         } catch (error) {
@@ -65,36 +55,28 @@ class Carritos {
     async addProductToCart(id, producto) {
         try {
             const carrito = JSON.parse(fs.readFileSync(this.fileName, "utf-8"));
-            const index = carrito.findIndex(
-                (carrito) => carrito.id === Number(id)
-            );
+            const index = carrito.findIndex((carrito) => carrito.id === Number(id));
             if (index === -1) return null;
             else {
                 carrito[index].productos.push(producto);
-                fs.writeFileSync(
-                    this.fileName,
-                    JSON.stringify(carrito, null, 2)
-                );
+                fs.writeFileSync(this.fileName, JSON.stringify(carrito, null, 2));
             }
         } catch (error) {
             console.log("Error addProductToCart: ", error);
         }
     }
 
-    async deleteProductFromCart(id, producto) {
+    async deleteProductFromCart(id, id_prod) {
         try {
             const carrito = JSON.parse(fs.readFileSync(this.fileName, "utf-8"));
-            const index = carrito.findIndex(
-                (carrito) => carrito.id === Number(id)
-            );
+            const index = carrito.findIndex((carrito) => carrito.id === Number(id));
             if (index === -1) return null;
             else {
-                const indexProducto = carrito[index].productos.findIndex(
-                    (producto) => producto.id === Number(producto.id)
-                );
-                if (indexProducto === -1) return null;
+                const producto = carrito[index].productos.find((prod) => prod.id === Number(id_prod));
+                if (producto === undefined) return null;
                 else {
-                    carrito[index].productos.splice(indexProducto, 1);
+                    const index_prod = carrito[index].productos.indexOf(producto);
+                    carrito[index].productos.splice(index_prod, 1);
                     fs.writeFileSync(this.fileName, JSON.stringify(carrito, null, 2));
                 }
             }

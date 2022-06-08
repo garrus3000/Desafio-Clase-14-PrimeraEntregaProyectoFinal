@@ -1,12 +1,16 @@
-const isItAdmin = (req, res, next) => {
-    const admin = true;
-    admin === true
-        ? next()
-        : res.status(401)
-              .send({
-				error: -1,
-				descripcion: `ruta ${req.originalUrl} y metodo ${req.method} no autorizada`,
-			});
+export const middlewareUserLogueado = (req, res, next) => {
+    req.user = {
+        fullName: "Ricardo Fort",
+        isAdmin: true,
+    };
+    next();
 };
 
-export default isItAdmin;
+export const middlewareIsAdmin = (req, res, next) => {
+ req.user.isAdmin
+        ? next()
+        : res.status(403).send({
+              error: -1,
+              descripcion: `ruta ${req.originalUrl} y metodo ${req.method} no autorizada`,
+          });
+};
